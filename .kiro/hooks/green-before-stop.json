@@ -1,0 +1,12 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Green Before Stop",
+      "description": "Ensures tests pass before ending session",
+      "trigger": "Stop",
+      "action": { "type": "command", "command": "node scripts/kiro-test-gate.mjs gate" },
+      "timeout": 150
+    }
+  ]
+}

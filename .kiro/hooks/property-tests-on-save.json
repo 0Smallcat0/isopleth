@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Property Tests on Save",
+      "description": "Runs tests after saving source or test files",
+      "trigger": "PostFileSave",
+      "matcher": "(src/core|test|mcp)[/\\\\].*\\.(js|mjs)$",
+      "action": { "type": "command", "command": "node scripts/kiro-test-gate.mjs report" },
+      "timeout": 150
+    }
+  ]
+}

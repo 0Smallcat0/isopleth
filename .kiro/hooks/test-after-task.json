@@ -1,0 +1,12 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Test After Task",
+      "description": "Runs tests after a spec task is completed",
+      "trigger": "PostTaskExec",
+      "action": { "type": "command", "command": "node scripts/kiro-test-gate.mjs report" },
+      "timeout": 150
+    }
+  ]
+}

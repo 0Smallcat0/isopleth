@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Guard Protected Files",
+      "description": "Blocks writes to protected paths (rules/, LICENSE, notes/brief.md)",
+      "trigger": "PreToolUse",
+      "matcher": "write",
+      "action": { "type": "command", "command": "node scripts/kiro-guard-paths.mjs" },
+      "timeout": 10
+    }
+  ]
+}

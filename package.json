@@ -1,0 +1,12 @@
+{
+  "name": "isopleth",
+  "version": "1.0.0",
+  "description": "Nomogram engine - compile formulas into printable alignment charts",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "fast-check": "^3.23.2"
+  }
+}
