@@ -21,9 +21,9 @@ Kiro's first steering draft had three formula errors. I listed them, Kiro correc
 
 | Hook | Trigger | What it does | Fired so far |
 |------|---------|--------------|--------------|
-| `property-tests-on-save` | file saved in `src/core/`, `test/`, `mcp/` | runs the whole suite, prints pass/fail and the failing test names | 43 |
-| `green-before-stop` | the agent tries to finish | if the suite is red, blocks the stop and hands the failure summary back (at most twice per session) | 4 |
-| `guard-protected-files` | before any write | refuses writes to the contest rules, the licence and the brief | 91 |
+| `property-tests-on-save` | file saved in `src/core/`, `test/`, `mcp/` | runs the whole suite, prints pass/fail and the failing test names | 53 |
+| `green-before-stop` | the agent tries to finish | if the suite is red, blocks the stop and hands the failure summary back (at most twice per session) | 6 (blocked once) |
+| `guard-protected-files` | before any write | refuses writes to the contest rules, the licence and the brief | 133 |
 | `test-after-task` | a spec task finishes | same summary after each spec-mode task | 0 |
 
 The hook scripts have their own tests (`test/hooks.test.js`), written by Kiro in a fix-up session after review found that the first guard ignored a bare `LICENSE` path and the first test gate never saw a failure.

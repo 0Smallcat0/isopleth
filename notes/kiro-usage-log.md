@@ -30,13 +30,13 @@ Other credit use: 0.09 before this project started; about 0.03 when a headless `
 
 ## Hooks observed firing
 
-Counted from `ContextualHookInvoked` events in the session logs (runs 04–09):
+Counted from `ContextualHookInvoked` events in all session logs for this repo:
 
 | Hook | Fired | Sessions |
 |------|-------|----------|
-| `guard-protected-files` (PreToolUse, write) | 91 | 04, 04b, 05, 07, 08, 09 |
-| `property-tests-on-save` (PostFileSave) | 43 | 04b, 05, 07, 08, 09 |
-| `green-before-stop` (Stop) | 4 | 04b, 07, 08, 09 |
+| `guard-protected-files` (PreToolUse, write) | 133 | 03b, 04, 04b, 05, 06, 07, 08, 09 |
+| `property-tests-on-save` (PostFileSave) | 53 | 04b, 05, 06, 07, 08, 09 |
+| `green-before-stop` (Stop) | 6 | 03b, 04b, 06, 07, 08, 09 — blocked once, in run 06 at 14:23, while run 05's half-written expression tests were red (the gate's per-session counter recorded one block) |
 | `test-after-task` (PostTaskExec) | 0 | tasks were run from prompts, not from spec-mode task execution |
 
 ## Notes per session
