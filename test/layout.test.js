@@ -235,3 +235,27 @@ describe('layout.js unit tests', () => {
     });
   });
 });
+
+describe('negative exponents stay on the sheet (hand fix after run 12)', () => {
+  // A product with a negative exponent has a decreasing scale function; the compiler
+  // used to report its min/max in range order, so the moduli summed to nearly zero and
+  // the output scale was laid out hundreds of millimetres off the sheet.
+  const cases = [
+    ['BMI = weight / height^2', { weight: [30, 150], height: [1.4, 2.1] }],
+    ['P = U^2 / R', { U: [1, 250], R: [1, 1000] }],
+    ['q = 3 * a / b^0.5', { a: [1, 10], b: [1, 100] }]
+  ];
+  for (const [formula, ranges] of cases) {
+    it(formula, () => {
+      const { lhs, rhs } = splitFormula(formula);
+      const chart = compile(parse(tokenize(rhs)), lhs, ranges, 'parallel');
+      assert(!chart.error, chart.error);
+      for (const s of layout(chart).scales) {
+        for (const [x, y] of [[s.x1, s.y1], [s.x2, s.y2]]) {
+          assert(x >= 0 && x <= 210 && y >= 0 && y <= 297, `${s.variable} endpoint (${x}, ${y}) off the sheet`);
+        }
+        assert(Math.abs(Math.abs(s.y2 - s.y1) - 212) < 1e-6, `${s.variable} does not span the usable height`);
+      }
+    });
+  }
+});

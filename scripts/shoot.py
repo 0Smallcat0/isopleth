@@ -127,6 +127,14 @@ def main():
         page.click("#example-list button[data-id='body-surface-area']")
         page.wait_for_timeout(200)
         page.screenshot(path=str(OUT / "05-body-surface-area.png"))
+        page.click("#example-list button[data-id='bmi']")
+        page.wait_for_timeout(200)
+        page.screenshot(path=str(OUT / "05b-bmi.png"))
+        results["bmi_readout"] = page.inner_text("#readout")
+        results["bmi_certificate"] = page.inner_text("#certificate")
+        # Every scale must lie on the sheet (negative exponents once pushed one off it).
+        results["bmi_scales_on_sheet"] = page.evaluate(
+            "window.isopleth.built.layout.scales.every(s => [s.x1, s.x2].every(x => x >= 0 && x <= 210))")
 
         # A formula typed by hand, with ranges edited in the table.
         page.fill("#formula", "P = U^2 / R")
@@ -139,8 +147,11 @@ def main():
         page.fill("input[data-var='R'][data-field='unit']", "Ω")
         page.fill("input[data-var='P'][data-field='unit']", "W")
         page.wait_for_timeout(300)
+        page.mouse.move(5, 5)  # no hover highlight left on the last example clicked
         page.screenshot(path=str(OUT / "06-typed-formula.png"))
         results["typed_overlap"] = page.evaluate(OVERLAP_JS)
+        results["typed_scales_on_sheet"] = page.evaluate(
+            "window.isopleth.built.layout.scales.every(s => [s.x1, s.x2].every(x => x >= 0 && x <= 210))")
         results["typed_certificate"] = page.inner_text("#certificate")
         url_with_hash = page.url
 
@@ -181,8 +192,9 @@ def main():
 
         browser.close()
     results["console_errors"] = errors
-    print(json.dumps(results, ensure_ascii=False, indent=1))
-    bad = errors or any(v for v in results["all_examples_overlap"].values())
+    sys.stdout.buffer.write((json.dumps(results, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
+    bad = (errors or any(v for v in results["all_examples_overlap"].values())
+           or not results["bmi_scales_on_sheet"] or not results["typed_scales_on_sheet"])
     sys.exit(1 if bad else 0)
 
 

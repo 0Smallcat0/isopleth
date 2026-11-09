@@ -38,8 +38,20 @@ Kiro wrote the code; I reviewed every batch against the formulas, not just the g
 
 ## Result so far
 
-Parser, compiler, scales and sheet geometry: 130 tests green, including collinearity on 200 random readings per example chart. Independent check on 2,000 random readings per example: |det| ≤ 5e-11 mm².
+Engine (parser, compiler, scales, layout, reader, certificate, sheet, SVG/PDF) and browser studio: 188 tests green, including collinearity on 200 random readings per example chart. Independent check on 2,000 random readings per example: |det| ≤ 5e-11 mm². Headless Chrome check of the studio (`scripts/shoot.py`, 2026-11-09): seven examples with no label overlaps, straightedge vs formula Δ ≈ 1e-12 relative after dragging, SVG and one-page A4 PDF downloads, URL restores the chart, no console errors.
 
-## Still to build before submission
+## Still to do before submission (remove this section from the final write-up)
 
-Reader, accuracy certificate, SVG sheet and examples (engine tasks T23–T37), the `make_nomogram` MCP server (T38–T41), and the chart studio UI (`chart-studio` T1–T17). After that: GitHub Pages deployment, screenshots and the demo video. This section is removed from the final write-up.
+Required by the rules (Submission Requirements):
+
+1. Make `0Smallcat0/isopleth` public with the MIT licence visible in the About box; push `main` (local is ahead of `origin/main`). `.kiro/` is tracked, not ignored.
+2. Working URL for judges: GitHub Pages from the repo root (static, no build step). Check the studio loads from the Pages URL (module paths are relative).
+3. Demo video under 3 minutes, public on YouTube, English, no third-party music or trademarks; draft in `notes/video-script.md`, screenshots in `work/shots-1109/`.
+4. Devpost form (draft https://devpost.com/software/1530210, currently "Untitled", created by the teammate's account): name *Isopleth*, tagline "Type a formula, print a paper calculator", category **Resurrection**, bonus **Best Student Project: Resurrection** (LinkedIn, student email, year and degree, school), Built with (Kiro, JavaScript, SVG, fast-check, Node test runner), GitHub URL, Pages URL, YouTube URL, description from README "Why this is a resurrection" and this write-up, testing instructions = README "Try it".
+5. This write-up: final pass with run 12 and the totals from `notes/kiro-usage-log.md`.
+
+Optional, scored or bonus:
+
+- `make_nomogram` MCP server (engine spec T38–T41) is specified but not built. Kiro credits: about 2.3 left; the free plan resets to 50 on 12-01, four days before the deadline, enough for one Kiro run to build it.
+- Chart-studio spec T11–T17 (mobile, accessibility audit, integration test, performance, docs) are not ticked; the browser check covers part of them.
+- Blog post (2,000 Kiro credits, top 100) must say it is written for the Kiroween 2026 hackathon; Social Blitz post must start with `#KiroweenHackathon26`. Both need the entrant's own accounts and must be posted before the deadline.

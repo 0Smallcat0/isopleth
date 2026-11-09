@@ -25,6 +25,16 @@ const EXAMPLES = [
     key: { u: 2, v: 50 }
   },
   {
+    id: 'bmi',
+    name: 'Body mass index',
+    formula: 'BMI = weight / height^2',
+    ranges: { weight: [30, 150], height: [1.4, 2.1] },
+    units: { weight: 'kg', height: 'm', BMI: 'kg/m²' },
+    layout: 'parallel',
+    description: "Quetelet's index: weight over height squared; the height scale runs downwards.",
+    key: { u: 70, v: 1.75 }
+  },
+  {
     id: 'body-surface-area',
     name: 'Body surface area (Mosteller)',
     formula: 'BSA = sqrt(height * weight / 3600)',

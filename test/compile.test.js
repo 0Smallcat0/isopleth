@@ -205,6 +205,72 @@ describe('compile.js unit tests', () => {
     });
   });
 
+  describe('R2 nested powers (run 12)', () => {
+    it('BMI = weight / height^2 with ranges {weight:[20,140], height:[1.2,2.0]}', () => {
+      const {lhs, rhs} = splitFormula('BMI = weight / height^2');
+      const tokens = tokenize(rhs);
+      const ast = parse(tokens);
+      const ranges = {weight: [20, 140], height: [1.2, 2.0]};
+      const result = compile(ast, lhs, ranges, 'parallel');
+
+      assert(!result.error, `Compile error: ${result.error}`);
+      assert.equal(result.form, 'product', `Expected product form, got ${result.form}`);
+
+      // Test evaluation: BMI = weight / height^2
+      const bmi = result.evaluate(70, 1.75);
+      const expected = 70 / (1.75 * 1.75);
+      const relErr = Math.abs(bmi - expected) / expected;
+      assert(relErr < 1e-12, `Relative error ${relErr} exceeds 1e-12 for evaluate(70, 1.75): got ${bmi}, expected ${expected}`);
+    });
+
+    it('P = U^2 / R still compiles and evaluate(10, 4) = 25', () => {
+      const {lhs, rhs} = splitFormula('P = U^2 / R');
+      const tokens = tokenize(rhs);
+      const ast = parse(tokens);
+      const ranges = {U: [1, 20], R: [0.5, 100]};
+      const result = compile(ast, lhs, ranges, 'parallel');
+
+      assert(!result.error, `Compile error: ${result.error}`);
+      assert.equal(result.form, 'product', `Expected product form, got ${result.form}`);
+
+      const p = result.evaluate(10, 4);
+      const expected = 100 / 4;
+      assert.equal(p, expected, `Expected ${expected}, got ${p}`);
+    });
+
+    it('q = 3 * a / b^0.5 with {a:[1,10], b:[1,100]}: evaluate(4, 16) = 3 within 1e-12', () => {
+      const {lhs, rhs} = splitFormula('q = 3 * a / b^0.5');
+      const tokens = tokenize(rhs);
+      const ast = parse(tokens);
+      const ranges = {a: [1, 10], b: [1, 100]};
+      const result = compile(ast, lhs, ranges, 'parallel');
+
+      assert(!result.error, `Compile error: ${result.error}`);
+      assert.equal(result.form, 'product', `Expected product form, got ${result.form}`);
+
+      const q = result.evaluate(4, 16);
+      const expected = 3 * 4 / Math.sqrt(16);
+      const relErr = Math.abs(q - expected) / expected;
+      assert(relErr < 1e-12, `Relative error ${relErr} exceeds 1e-12 for evaluate(4, 16): got ${q}, expected ${expected}`);
+    });
+
+    it('z = a^2 / (b^3)^2 with {a:[1,10], b:[1,3]}: evaluate(2, 1.5) = 4 / 1.5^6 within 1e-12', () => {
+      const {lhs, rhs} = splitFormula('z = a^2 / (b^3)^2');
+      const tokens = tokenize(rhs);
+      const ast = parse(tokens);
+      const ranges = {a: [1, 10], b: [1, 3]};
+      const result = compile(ast, lhs, ranges, 'parallel');
+
+      assert(!result.error, `Compile error: ${result.error}`);
+      assert.equal(result.form, 'product', `Expected product form, got ${result.form}`);
+
+      const z = result.evaluate(2, 1.5);
+      const expected = 4 / Math.pow(1.5, 6);
+      const relErr = Math.abs(z - expected) / expected;
+      assert(relErr < 1e-12, `Relative error ${relErr} exceeds 1e-12 for evaluate(2, 1.5): got ${z}, expected ${expected}`);
+    });
+  });
+
   describe('Error handling', () => {
     it('should reject wrong number of variables', () => {
       const {lhs, rhs} = splitFormula('w = u + v + x');

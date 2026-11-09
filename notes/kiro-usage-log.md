@@ -25,10 +25,11 @@ The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro
 | 09 | 15:06–15:17 | claude-haiku-4.5 | agent `nomographer` | Engine tasks T18–T22: `layout.js` (parallel and Z-chart geometry, ticks) with collinearity, round-trip and bounds properties; output-range bug in the compiler | `src/core/layout.js`, `test/layout.test.js`, `test/layout.property.test.js`, `src/core/compile.js`, `test/compile.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 1.83 |
 | 10 | 11-07 10:30–10:41 | claude-haiku-4.5 | agent `nomographer` | Engine tasks T23–T26: `reader.js` (point on scale, value at point with clamping, line through two scales intersected with the third, any pair of scales, Z-chart diagonal) with unit tests and forward/backward reader properties on five charts | `src/core/reader.js`, `test/reader.test.js`, `test/reader.property.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 3.75 |
 | 11 | 11-07 10:44–10:48 | claude-haiku-4.5 | agent `nomographer` | Chart-studio tasks T3–T4: DOM-free studio state (`encodeStateToHash`, `decodeStateFromHash` with validation, `nextSolved` for the least-recently-moved handle, `fileName`) and its property tests | `src/ui/state.js`, `test/state.property.test.js`, `.kiro/specs/chart-studio/tasks.md` | 1.56 |
+| 12 | 11-09 10:29–10:41 | claude-haiku-4.5 | agent `nomographer` | Compiler gap: `BMI = weight / height^2` was rejected because `analyzePowerFactor` dropped nested powers `(height^2)^-1`; make it recursive, accept unary-minus exponents, add the BMI example and four regression tests | `src/core/compile.js`, `src/core/examples.js`, `test/compile.test.js` | 3.41 |
 
 Other credit use: 0.09 before this project started; about 0.03 when a headless `/usage` command was sent to the model by mistake.
 
-**Meter at 15:18 on 11-04: 38.96 of 50 credits used, 11.04 left.** Runs 10 and 11 (11-07) used 5.31 more by their usage summaries, so about 5.7 were left before run 12.
+**Meter at 15:18 on 11-04: 38.96 of 50 credits used, 11.04 left.** Runs 10 and 11 (11-07) used 5.31 more by their usage summaries, so about 5.7 were left before run 12. Run 12 used 3.41: **about 2.3 credits left until the monthly reset on 12-01.**
 
 ## Hooks observed firing
 
@@ -53,6 +54,7 @@ Counted from `ContextualHookInvoked` events in all session logs for this repo:
 - **08** – Fixed all three compiler bugs (111 tests green), then ticked T18–T26 in the task list although `layout.js` and `reader.js` were never written. I unticked them. Lesson: give one part per session and check the files, not the summary.
 - **09** – Wrote `layout.js` and 19 tests in eleven minutes, the cheapest batch per task. My own check with 2,000 random readings per example: collinearity |det| ≤ 5e-11 mm² on all five examples, but reading a value back off the hypotenuse chart's `c` scale was wrong by a factor of up to 13 (the inverse assumed the scale function is the identity); Kiro's round-trip property had not included that example. Fixed by hand, see below.
 - **10** – Worked through the Z-chart reader with four debug scripts in the repo root and deleted them itself before finishing; 144 tests green at the end. The prompt fixed the exact signatures and tolerance, which kept the run to eleven minutes.
+- **12** – Kiro's shell crashed (PowerShell exit 3221225794) in the middle of the run, so it could not run the suite at the end and reported the fix unverified. Run afterwards by hand: all compiler tests green, but the BMI chart's output scale was laid out far off the sheet — a layout bug the compiler change exposed (see hand edits). It also chose its own BMI ranges (20–140 kg, 1.2–2.0 m) instead of the ones in the prompt.
 - **11** – The chart-studio task list had no checkboxes, so, as the prompt allowed, it added `**Status:** done` under T3 and T4. 181 tests green.
 
 ## Hand edits (not Kiro)
@@ -72,3 +74,10 @@ Written by hand, not by Kiro, following the engine spec (T27–T37) and the char
 - `scripts/shoot.py`: headless Chrome check of the studio (screenshots, drag, keyboard, downloads, hash restore, error caret, print, label overlap by rendered bounding boxes).
 - `src/core/layout.js`: the Z-chart diagonal's `pointToValue` returned the scale function's value instead of inverting it; now always inverts on the range.
 - `src/core/expr.js`: "Unexpected end of input" now reports the end token's position, so the studio's caret points at the right place.
+
+### 2026-11-09 (after run 12)
+
+- `src/core/compile.js` – product form: a negative exponent makes the scale function decreasing, but `min`/`max` were taken in range order, so the two outer moduli nearly cancelled and BMI's output scale landed hundreds of millimetres off the sheet. `min`/`max` are now the function's extent. Regression test in `test/layout.test.js` (three formulas with negative exponents: every endpoint on the A4 sheet, every scale spans the usable height).
+- `src/core/examples.js` – BMI ranges set to 30–150 kg and 1.4–2.1 m (adult range, as the prompt asked) and description rewritten.
+- `scripts/shoot.py` – BMI screenshot and reading check, scales-on-sheet checks for BMI and the typed formula, UTF-8 output on Windows, mouse moved off the example list before the typed-formula screenshot.
+- Result: 188/188 tests; browser check: BMI 70 kg, 1.75 m reads 22.86 kg/m² (straightedge vs formula Δ 6.4e-13), certificate ±0.63 %, no label overlaps on any of the seven examples, no console errors, SVG and one-page A4 PDF download.

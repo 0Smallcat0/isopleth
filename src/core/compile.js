@@ -373,8 +373,9 @@ function tryProduct(ast, outputVar, ranges) {
     fn: (x) => p * Math.log10(x),
     range: [ranges[u][0], ranges[u][1]],
     scaleKind: 'log',
-    min: p * Math.log10(ranges[u][0]),
-    max: p * Math.log10(ranges[u][1])
+    // A negative exponent makes fn decreasing; min/max are the function's extent.
+    min: Math.min(p * Math.log10(ranges[u][0]), p * Math.log10(ranges[u][1])),
+    max: Math.max(p * Math.log10(ranges[u][0]), p * Math.log10(ranges[u][1]))
   });
 
   scales.push({
@@ -383,8 +384,9 @@ function tryProduct(ast, outputVar, ranges) {
     fn: (x) => q * Math.log10(x),
     range: [ranges[v][0], ranges[v][1]],
     scaleKind: 'log',
-    min: q * Math.log10(ranges[v][0]),
-    max: q * Math.log10(ranges[v][1])
+    // A negative exponent makes fn decreasing; min/max are the function's extent.
+    min: Math.min(q * Math.log10(ranges[v][0]), q * Math.log10(ranges[v][1])),
+    max: Math.max(q * Math.log10(ranges[v][0]), q * Math.log10(ranges[v][1]))
   });
 
   // Compute output range
@@ -446,18 +448,17 @@ function collectMultiplicativeFactors(ast) {
 /**
  * Analyze a power factor: extract exponent and variable.
  * Returns {coeff, variable, exp} where variable is null for constants.
+ * Handles nested powers recursively: (X^a)^b => X^(a*b).
  */
-function analyzePowerFactor(ast) {
+function analyzePowerFactor(ast, depth = 0) {
+  // Prevent infinite recursion
+  if (depth > 10 || !ast || !ast.kind) {
+    return {coeff: 1, variable: null, exp: 1};
+  }
+
   // Case: identifier (exponent 1)
   if (ast.kind === 'identifier') {
     return {coeff: 1, variable: ast.name, exp: 1};
-  }
-
-  // Case: identifier ^ exponent
-  if (ast.kind === 'binop' && ast.op === '^') {
-    if (ast.left.kind === 'identifier' && ast.right.kind === 'number') {
-      return {coeff: 1, variable: ast.left.name, exp: ast.right.value};
-    }
   }
 
   // Case: constant
@@ -465,10 +466,35 @@ function analyzePowerFactor(ast) {
     return {coeff: ast.value, variable: null, exp: 1};
   }
 
-  // Case: constant^exponent
+  // Case: unary minus on a number (e.g., -2)
+  if (ast.kind === 'unary' && ast.op === '-' && ast.arg && ast.arg.kind === 'number') {
+    return {coeff: -ast.arg.value, variable: null, exp: 1};
+  }
+
+  // Case: power operator
   if (ast.kind === 'binop' && ast.op === '^') {
-    if (ast.left.kind === 'number' && ast.right.kind === 'number') {
-      return {coeff: Math.pow(ast.left.value, ast.right.value), variable: null, exp: 1};
+    // Extract the exponent (right side)
+    let exponent = null;
+    
+    // Try to extract numeric exponent: could be a number or unary minus applied to a number
+    if (ast.right && ast.right.kind === 'number') {
+      exponent = ast.right.value;
+    } else if (ast.right && ast.right.kind === 'unary' && ast.right.op === '-' && ast.right.arg && ast.right.arg.kind === 'number') {
+      exponent = -ast.right.arg.value;
+    }
+    
+    if (exponent !== null) {
+      // Recursively analyze the left side (the base)
+      const base = analyzePowerFactor(ast.left, depth + 1);
+      
+      // If base is a variable (variable !== null), multiply exponents
+      if (base.variable !== null) {
+        return {coeff: base.coeff, variable: base.variable, exp: base.exp * exponent};
+      }
+      // If base is a constant, fold the exponent into the coefficient
+      if (base.variable === null) {
+        return {coeff: Math.pow(base.coeff, exponent), variable: null, exp: 1};
+      }
     }
   }
 
