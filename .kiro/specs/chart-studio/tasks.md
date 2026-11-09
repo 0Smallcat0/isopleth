@@ -46,6 +46,7 @@ This task list breaks down the Chart Studio single-page app (SPA) into small, te
 ---
 
 ## T3: DOM-Free State Helpers (src/ui/state.js)
+**Status:** done  
 **Requirements:** R10, P1 (URL hash round-trip)  
 **Effort:** 60 min
 
@@ -109,6 +110,7 @@ export function computeVerificationDelta(state);
 ---
 
 ## T4: Property Tests for State Helpers (test/state.property.test.js)
+**Status:** done  
 **Requirements:** P1, R15.1  
 **Effort:** 30 min
 

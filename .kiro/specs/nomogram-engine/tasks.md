@@ -28,10 +28,10 @@ This task list breaks down the nomogram engine implementation into small, ordere
 - [x] T20: Layout dispatcher and helpers (layout.js part 3)
 - [x] T21: Unit tests for layout.js
 - [x] T22: Property tests for layout.js
-- [ ] T23: Reader for parallel scales (reader.js part 1)
-- [ ] T24: Reader helpers and Z-chart support (reader.js part 2)
-- [ ] T25: Unit tests for reader.js
-- [ ] T26: Property tests for reader.js
+- [x] T23: Reader for parallel scales (reader.js part 1)
+- [x] T24: Reader helpers and Z-chart support (reader.js part 2)
+- [x] T25: Unit tests for reader.js
+- [x] T26: Property tests for reader.js
 
 ---
 

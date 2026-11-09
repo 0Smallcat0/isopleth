@@ -248,7 +248,7 @@ export function parse(tokens) {
     }
 
     if (token.type === 'EOF') {
-      return { error: "Unexpected end of input", pos };
+      return { error: "Unexpected end of input", pos: token.pos };
     }
 
     return { error: `Unexpected token '${token.value}'`, pos: token.pos };

@@ -360,12 +360,8 @@ function buildDiagonalScale(scaleInfo, m1, m2, x1, y1, x2, y2, L, H) {
     // Invert: f = m2*t / (m1*(1-t))
     const f = (m2 * t) / (m1 * (1 - t));
     
-    // Invert scale function to get value
-    if (scaleInfo.scaleKind === 'linear') {
-      return f;
-    } else {
-      return invertLogScale(f, scaleInfo, m2, 0);
-    }
+    // f is the scale function's value (w / k), not w: invert fn on the range.
+    return invertLogScale(f, scaleInfo, m2, 0);
   };
 
   const p1 = valueToPoint(scaleInfo.range[0]);

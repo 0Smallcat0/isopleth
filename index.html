@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Isopleth — formula to paper calculator</title>
+<meta name="description" content="Compile a formula into a printable nomogram with a stated accuracy. Drag the straightedge, print at true scale.">
+<meta property="og:title" content="Isopleth">
+<meta property="og:description" content="Formula to paper calculator: printable, verified nomograms.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="src/ui/app.js"></script>
+</head>
+<body>
+<header class="masthead">
+  <div class="brand">
+    <span class="wordmark">Isopleth</span>
+    <span class="subtitle">Formula → paper calculator</span>
+  </div>
+  <nav aria-label="Studio">
+    <a href="#examples" id="nav-examples">Examples</a>
+    <a href="#how" id="nav-how">How it works</a>
+    <button type="button" id="nav-print" class="link">Print</button>
+  </nav>
+</header>
+
+<main class="studio">
+  <aside class="panel" aria-label="Chart settings">
+    <form id="form" autocomplete="off" spellcheck="false" onsubmit="return false">
+      <section class="block">
+        <label class="caption" for="formula">Formula</label>
+        <textarea id="formula" rows="2" aria-describedby="formula-error"></textarea>
+        <pre id="formula-error" class="error" aria-live="assertive"></pre>
+      </section>
+
+      <section class="block">
+        <h2 class="caption">Scales</h2>
+        <table class="vars" id="vars">
+          <thead><tr><th scope="col"></th><th scope="col">min</th><th scope="col">max</th><th scope="col">unit</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="block row">
+        <fieldset class="layout">
+          <legend class="caption">Layout</legend>
+          <label><input type="radio" name="layout" value="parallel"> Parallel</label>
+          <label><input type="radio" name="layout" value="z"> Z-chart</label>
+        </fieldset>
+        <div class="tolerance">
+          <label class="caption" for="delta">Ruler error ±mm</label>
+          <input id="delta" type="number" min="0.1" max="5" step="0.1" value="0.5">
+        </div>
+      </section>
+
+      <section class="block">
+        <h2 class="caption">Accuracy</h2>
+        <p id="certificate" class="certificate"></p>
+        <p id="certificate-method" class="method"></p>
+      </section>
+
+      <section class="block actions">
+        <button type="button" id="dl-svg">Download SVG</button>
+        <button type="button" id="dl-pdf">Download PDF</button>
+        <button type="button" id="print">Print</button>
+      </section>
+
+      <section class="block" id="examples">
+        <h2 class="caption">Examples</h2>
+        <ul id="example-list" class="examples"></ul>
+      </section>
+    </form>
+  </aside>
+
+  <section class="desk" aria-label="Sheet">
+    <div class="sheet-frame" id="sheet-frame">
+      <div id="sheet" class="sheet-holder"></div>
+      <svg id="overlay" class="overlay" viewBox="0 0 210 297" aria-label="Straightedge"></svg>
+    </div>
+    <div class="readout" aria-live="polite">
+      <p id="readout" class="reading"></p>
+      <p id="verify" class="verify"></p>
+    </div>
+  </section>
+</main>
+
+<dialog id="how-dialog" aria-labelledby="how-title">
+  <h2 id="how-title">How it works</h2>
+  <p>A nomogram is a calculator printed on paper. Each variable of the formula is a scale; the scales are drawn so that any three values that satisfy the formula lie on one straight line.</p>
+  <p>Maurice d'Ocagne named and systematised the method in 1884. Engineering handbooks, flight manuals and clinical references printed nomograms until pocket calculators replaced them in the 1970s.</p>
+  <p>To read one, lay a straightedge across two known values and read the answer where it crosses the third scale. Here you can drag any handle; the one you touched least recently is solved.</p>
+  <p>Every sheet states its own accuracy: Isopleth moves the straightedge by the stated error at 1,681 points of the chart and reports the worst reading, with a 10 % margin.</p>
+  <p>The printed chart needs no power, no device and no network. Check the 100 mm bar on the print before use.</p>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+</body>
+</html>

@@ -6,7 +6,7 @@ Every Kiro session used to build Isopleth, in order. Kiro CLI 3.0.0 was driven h
 kiro-cli chat --v3 --no-interactive --trust-all-tools --trust-workspace --model <model> [--mode spec] [--agent nomographer]
 ```
 
-The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro writes to `~/.kiro/sessions/**/messages.jsonl`; where a session was interrupted and wrote no summary, the figure comes from the account meter (`/usage`) read before and after. Times are Taiwan time (UTC+8), 2026-11-04. Plan: Kiro Free, 50 credits per month.
+The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro writes to `~/.kiro/sessions/**/messages.jsonl`; where a session was interrupted and wrote no summary, the figure comes from the account meter (`/usage`) read before and after. Times are Taiwan time (UTC+8); runs 01–09 on 2026-11-04, later runs dated in the table. Plan: Kiro Free, 50 credits per month.
 
 "Files" lists what the session created or changed. Anything changed by hand afterwards is listed under *Hand edits* at the bottom, so the split between Kiro's work and mine stays visible.
 
@@ -23,10 +23,12 @@ The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro
 | 07 | 14:33–14:50 | claude-haiku-4.5 | agent `nomographer` | Convert tasks.md to a checklist; engine tasks T7–T17: compiler (sum, product, outer function, Z-chart) and scales (ticks, label thinning) with unit and property tests | `.kiro/specs/nomogram-engine/tasks.md`, `src/core/compile.js`, `src/core/scales.js`, `test/compile.test.js`, `test/compile.property.test.js`, `test/scales.test.js`, `test/scales.property.test.js` | 4.37 |
 | 08 | 14:54–15:02 | claude-haiku-4.5 | agent `nomographer` | Part A: fix the three compiler bugs from my review with regression tests and an all-examples property; fix the flaky property. Parts B/C (layout, reader) were in the same prompt but not done | `src/core/compile.js`, `test/compile.test.js`, `test/compile.property.test.js`, `test/scales.property.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 3.47 |
 | 09 | 15:06–15:17 | claude-haiku-4.5 | agent `nomographer` | Engine tasks T18–T22: `layout.js` (parallel and Z-chart geometry, ticks) with collinearity, round-trip and bounds properties; output-range bug in the compiler | `src/core/layout.js`, `test/layout.test.js`, `test/layout.property.test.js`, `src/core/compile.js`, `test/compile.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 1.83 |
+| 10 | 11-07 10:30–10:41 | claude-haiku-4.5 | agent `nomographer` | Engine tasks T23–T26: `reader.js` (point on scale, value at point with clamping, line through two scales intersected with the third, any pair of scales, Z-chart diagonal) with unit tests and forward/backward reader properties on five charts | `src/core/reader.js`, `test/reader.test.js`, `test/reader.property.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 3.75 |
+| 11 | 11-07 10:44–10:48 | claude-haiku-4.5 | agent `nomographer` | Chart-studio tasks T3–T4: DOM-free studio state (`encodeStateToHash`, `decodeStateFromHash` with validation, `nextSolved` for the least-recently-moved handle, `fileName`) and its property tests | `src/ui/state.js`, `test/state.property.test.js`, `.kiro/specs/chart-studio/tasks.md` | 1.56 |
 
 Other credit use: 0.09 before this project started; about 0.03 when a headless `/usage` command was sent to the model by mistake.
 
-**Meter at 15:18: 38.96 of 50 credits used, 11.04 left.** Kiro work stopped there to keep a 10-credit reserve.
+**Meter at 15:18 on 11-04: 38.96 of 50 credits used, 11.04 left.** Runs 10 and 11 (11-07) used 5.31 more by their usage summaries, so about 5.7 were left before run 12.
 
 ## Hooks observed firing
 
@@ -50,6 +52,8 @@ Counted from `ContextualHookInvoked` events in all session logs for this repo:
 - **07** – Marked T7–T17 done with 100 of 101 tests green; the one red property (log-scale monotonicity) is flaky on adjacent doubles. Running the five example formulas through the compiler afterwards showed three real bugs the tests had missed (outer `sqrt` not applied in `evaluate`, `sqrt(H*W/3600)` not normalised, ratio never reaching the Z-chart branch). They went back to Kiro as regression tests in run 08. The session also left three `test-output*.txt` files and a conversion script in the repo, which I removed.
 - **08** – Fixed all three compiler bugs (111 tests green), then ticked T18–T26 in the task list although `layout.js` and `reader.js` were never written. I unticked them. Lesson: give one part per session and check the files, not the summary.
 - **09** – Wrote `layout.js` and 19 tests in eleven minutes, the cheapest batch per task. My own check with 2,000 random readings per example: collinearity |det| ≤ 5e-11 mm² on all five examples, but reading a value back off the hypotenuse chart's `c` scale was wrong by a factor of up to 13 (the inverse assumed the scale function is the identity); Kiro's round-trip property had not included that example. Fixed by hand, see below.
+- **10** – Worked through the Z-chart reader with four debug scripts in the repo root and deleted them itself before finishing; 144 tests green at the end. The prompt fixed the exact signatures and tolerance, which kept the run to eleven minutes.
+- **11** – The chart-studio task list had no checkboxes, so, as the prompt allowed, it added `**Status:** done` under T3 and T4. 181 tests green.
 
 ## Hand edits (not Kiro)
 
@@ -58,3 +62,13 @@ Counted from `ContextualHookInvoked` events in all session logs for this repo:
 - `scripts/kiro-test-gate.mjs` – after run 04b: report mode prints a short summary (counts and failing test names) instead of the whole test output; gate mode exits 0 with the block JSON and puts the summary in `reason`, as the Stop-hook contract asks.
 - `.kiro/specs/nomogram-engine/tasks.md` – after run 08: T18–T26 set back to `[ ]` (not implemented). Run 09 then ticked T18–T22 itself.
 - `src/core/layout.js` – after run 09, `pointToValue` on parallel scales: always invert the scale function numerically (it was returning f(value) for non-log scales, wrong for `a^2`, `c^2`), and take the bisection direction from the function so decreasing scales (negative exponents) invert correctly. Checked with 2,000 random readings each on `c = sqrt(a^2+b^2)`, `I = V / R`, `V = I * R`: round-trip error ≤ 4e-11 relative; suite 130/130 green.
+
+### 2026-11-07 (after runs 10–11, Kiro credits held back)
+
+Written by hand, not by Kiro, following the engine spec (T27–T37) and the chart-studio spec (T1, T2, T5–T10):
+
+- Engine: `src/core/graduate.js` (tick graduation), `certificate.js` (accuracy certificate on a 41 × 41 grid with straightedge perturbations and a ×1.1 margin), `sheet.js` (A4 drafting sheet, title block, 100 mm calibration bar, label collision avoidance), `svg.js`, `pdf.js` (dependency-free one-page PDF), `text.js`, `pipeline.js` (formula text → chart, layout, certificate), `examples.js`; tests in `test/sheet.test.js`.
+- Studio: `index.html`, `styles.css`, `src/ui/app.js` (straightedge overlay with pointer and keyboard dragging, least-recently-moved handle solved through `nextSolved`, live straightedge-vs-formula Δ, URL-hash state, SVG/PDF download, print).
+- `scripts/shoot.py`: headless Chrome check of the studio (screenshots, drag, keyboard, downloads, hash restore, error caret, print, label overlap by rendered bounding boxes).
+- `src/core/layout.js`: the Z-chart diagonal's `pointToValue` returned the scale function's value instead of inverting it; now always inverts on the range.
+- `src/core/expr.js`: "Unexpected end of input" now reports the end token's position, so the studio's caret points at the right place.
