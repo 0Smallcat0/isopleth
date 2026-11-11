@@ -32,6 +32,10 @@ This task list breaks down the nomogram engine implementation into small, ordere
 - [x] T24: Reader helpers and Z-chart support (reader.js part 2)
 - [x] T25: Unit tests for reader.js
 - [x] T26: Property tests for reader.js
+- [x] T38: MCP server — protocol scaffold (mcp/server.mjs part 1)
+- [x] T39: MCP server — make_nomogram tool (mcp/server.mjs part 2)
+- [x] T40: MCP server registration (.kiro/settings/mcp.json) — file written by hand after Kiro's write was denied by a permission rule
+- [x] T41: MCP server test (test/mcp.test.js)
 
 ---
 

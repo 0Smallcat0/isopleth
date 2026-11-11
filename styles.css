@@ -5,9 +5,9 @@
   --desk: #e6e2d8;
   --sheet: #fcfbf7;
   --ink: #1f1e1c;
-  --muted: #6f6a60;
+  --muted: #69645b;
   --rule: #cfc9bc;
-  --accent: #c43c25;
+  --accent: #b73823;
   --ui: "Helvetica Neue", "Segoe UI", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Courier New", monospace;
   --masthead: 52px;
@@ -263,7 +263,15 @@ dialog button { margin-top: 8px; padding: 6px 14px; background: none; border: 1p
 @media (max-width: 1023px) {
   .studio { grid-template-columns: 1fr; height: auto; }
   .panel { border-right: 0; border-bottom: 1px solid var(--rule); }
-  .desk { overflow: visible; }
+  .desk { overflow: visible; padding: 12px; }
+}
+
+/* Phones: keep the masthead on one row */
+@media (max-width: 599px) {
+  .masthead { padding: 0 16px; }
+  .subtitle { display: none; }
+  .masthead nav { gap: 14px; }
+  .masthead nav a, .masthead nav .link { white-space: nowrap; }
 }
 
 /* Print: the sheet alone, at true scale */

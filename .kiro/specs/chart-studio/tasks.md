@@ -511,6 +511,7 @@ Create dialog content (HTML in index.html, show/hide with JavaScript):
 ---
 
 ## T11: Responsive Layout Mobile Test
+**Status:** done (browser part in scripts/shoot.py)  
 **Requirements:** R1, R13  
 **Effort:** 30 min
 
@@ -525,6 +526,7 @@ Verify responsive behavior:
 ---
 
 ## T12: Accessibility Audit
+**Status:** done  
 **Requirements:** R11.4–R11.8  
 **Effort:** 30 min
 
@@ -583,6 +585,7 @@ Create `test/chart-studio.integration.test.js` using JSDOM or Puppeteer (if head
 ---
 
 ## T15: Code Review Checklist
+**Status:** done  
 **Requirements:** All  
 **Effort:** 30 min
 

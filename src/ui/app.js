@@ -434,9 +434,26 @@ function renderCertificate() {
   $('certificate-method').textContent = formatCertificateMethod(c);
 }
 
+// Below 1024 px the panel stacks above the sheet (see the matching @media in styles.css).
+const NARROW_QUERY = '(max-width: 1023px)';
+
 function fitSheet() {
   const desk = document.querySelector('.desk');
   const frame = $('sheet-frame');
+  if (window.matchMedia(NARROW_QUERY).matches) {
+    // Narrow viewport: size by width so the sheet stays legible; the page scrolls vertically.
+    const pad = getComputedStyle(desk);
+    const sideGap = (parseFloat(pad.paddingLeft) || 0) + (parseFloat(pad.paddingRight) || 0);
+    const setByWidth = () => {
+      const w = Math.floor(desk.clientWidth - sideGap);
+      frame.style.width = `${w}px`;
+      frame.style.height = `${Math.floor((w * 297) / 210)}px`;
+    };
+    setByWidth();
+    // A vertical scrollbar can appear once the tall sheet is set; re-measure so nothing overflows sideways.
+    setByWidth();
+    return;
+  }
   const readout = document.querySelector('.readout');
   const availH = desk.clientHeight - 20 - 12 - readout.offsetHeight - 8;
   const availW = desk.clientWidth - 40;

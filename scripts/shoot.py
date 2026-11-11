@@ -55,6 +55,86 @@ def drag(page, i, dy, dx=0):
     page.mouse.up()
 
 
+# Boxes for the responsive checks (CSS pixels, viewport coordinates).
+LAYOUT_JS = """
+() => {
+  const box = (s) => { const b = document.querySelector(s).getBoundingClientRect();
+    return {left: b.left, right: b.right, top: b.top, bottom: b.bottom, width: b.width}; };
+  return {panel: box('.panel'), frame: box('#sheet-frame'),
+          scrollWidth: document.documentElement.scrollWidth, innerWidth: window.innerWidth};
+}
+"""
+
+EPS = 0.5  # sub-pixel tolerance for layout comparisons
+
+
+def open_studio(browser, errors, width, height, **opts):
+    ctx = browser.new_context(viewport={"width": width, "height": height}, **opts)
+    page = ctx.new_page()
+    page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.goto(BASE)
+    page.wait_for_selector("#sheet svg")
+    page.wait_for_timeout(300)
+    return ctx, page
+
+
+def responsive_checks(browser, errors):
+    """T11: 390 px phone (touch), 1023 px (stacked), 1024 px (side by side)."""
+    out = {}
+
+    # Phone: portrait, touch. Panel above sheet, nothing wider than the viewport, handles draggable.
+    ctx, page = open_studio(browser, errors, 390, 844, is_mobile=True, has_touch=True)
+    m = page.evaluate(LAYOUT_JS)
+    masthead_h = page.evaluate("document.querySelector('.masthead').getBoundingClientRect().height")
+    page.screenshot(path=str(OUT / "mobile-390.png"), full_page=True)
+    page.evaluate("document.getElementById('sheet-frame').scrollIntoView({block: 'start'})")
+    page.wait_for_timeout(200)
+    before = page.inner_text("#readout")
+    c = handle_center(page, 1)
+    on_screen = 0 <= c["x"] <= 390 and 0 <= c["y"] <= 844
+    drag(page, 1, -60)
+    page.wait_for_timeout(100)
+    after = page.inner_text("#readout")
+    out["mobile_390"] = {
+        "no_horizontal_scroll": m["scrollWidth"] <= m["innerWidth"],
+        "sheet_uses_width": m["frame"]["width"] >= 0.85 * m["innerWidth"],
+        "masthead_one_row": masthead_h <= 60,
+        "panel_above_sheet": m["panel"]["bottom"] <= m["frame"]["top"] + EPS,
+        "sheet_fits_viewport_width": m["frame"]["width"] <= m["innerWidth"] + EPS,
+        "handle_on_screen": on_screen,
+        "drag_changes_readout": before != after,
+        "readout_before": before,
+        "readout_after": after,
+        "sheet_width_px": m["frame"]["width"],
+        "masthead_height_px": masthead_h,
+    }
+    ctx.close()
+
+    # 1023 px: still stacked.
+    ctx, page = open_studio(browser, errors, 1023, 768)
+    m = page.evaluate(LAYOUT_JS)
+    page.screenshot(path=str(OUT / "tablet-1023.png"), full_page=True)
+    out["tablet_1023"] = {
+        "no_horizontal_scroll": m["scrollWidth"] <= m["innerWidth"],
+        "stacked": m["panel"]["bottom"] <= m["frame"]["top"] + EPS,
+    }
+    ctx.close()
+
+    # 1024 px: panel left, sheet right.
+    ctx, page = open_studio(browser, errors, 1024, 768)
+    m = page.evaluate(LAYOUT_JS)
+    page.screenshot(path=str(OUT / "desktop-1024.png"), full_page=True)
+    out["desktop_1024"] = {
+        "no_horizontal_scroll": m["scrollWidth"] <= m["innerWidth"],
+        "side_by_side": m["frame"]["left"] >= m["panel"]["right"] - EPS,
+    }
+    ctx.close()
+
+    out["ok"] = all(v for section in out.values() for k, v in section.items() if isinstance(v, bool))
+    return out
+
+
 def main():
     results = {}
     errors = []
@@ -190,11 +270,15 @@ def main():
         page.wait_for_timeout(300)
         page.screenshot(path=str(OUT / "10-narrow-900px.png"), full_page=True)
 
+        # Responsive layout and touch (T11)
+        results["responsive"] = responsive_checks(browser, errors)
+
         browser.close()
     results["console_errors"] = errors
     sys.stdout.buffer.write((json.dumps(results, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
     bad = (errors or any(v for v in results["all_examples_overlap"].values())
-           or not results["bmi_scales_on_sheet"] or not results["typed_scales_on_sheet"])
+           or not results["bmi_scales_on_sheet"] or not results["typed_scales_on_sheet"]
+           or not results["responsive"]["ok"])
     sys.exit(1 if bad else 0)
 
 

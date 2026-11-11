@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "isopleth-nomogram": {
+      "command": "node",
+      "args": ["mcp/server.mjs"],
+      "disabled": false
+    }
+  }
+}
