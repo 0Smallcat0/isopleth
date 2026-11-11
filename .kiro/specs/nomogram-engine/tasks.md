@@ -36,6 +36,7 @@ This task list breaks down the nomogram engine implementation into small, ordere
 - [x] T39: MCP server — make_nomogram tool (mcp/server.mjs part 2)
 - [x] T40: MCP server registration (.kiro/settings/mcp.json) — file written by hand after Kiro's write was denied by a permission rule
 - [x] T41: MCP server test (test/mcp.test.js)
+- [x] T43: Documentation and README (MCP part)
 
 ---
 
@@ -710,6 +711,7 @@ Create `test/mcp.test.js`:
 ---
 
 ## T43: Documentation and README
+**Status:** done (MCP part of the README: registration, arguments, example request, manual test, output, outFile rule; test/docs.test.js)  
 **Requirements:** Project completeness  
 **Effort:** 30 min
 

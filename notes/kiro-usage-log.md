@@ -6,7 +6,7 @@ Every Kiro session used to build Isopleth, in order. Kiro CLI 3.0.0 was driven h
 kiro-cli chat --v3 --no-interactive --trust-all-tools --trust-workspace --model <model> [--mode spec] [--agent nomographer]
 ```
 
-The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro writes to `~/.kiro/sessions/**/messages.jsonl`; where a session was interrupted and wrote no summary, the figure comes from the account meter (`/usage`) read before and after. Times are Taiwan time (UTC+8); runs 01–09 on 2026-11-04, later runs dated in the table. Plan: Kiro Free, 50 credits per month.
+The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro writes to `~/.kiro/sessions/**/messages.jsonl`; where a session was interrupted and wrote no summary, the figure comes from the account meter (`/usage`) read before and after. Times are Taiwan time (UTC+8); runs 01–09 on 2026-11-04, later runs dated in the table. Plan: Kiro Free, 50 credits per month; from 11-11 also the Kiroween bonus of 4,000 credits (runs 13–17 drew from it).
 
 "Files" lists what the session created or changed. Anything changed by hand afterwards is listed under *Hand edits* at the bottom, so the split between Kiro's work and mine stays visible.
 
@@ -26,6 +26,11 @@ The prompt was sent on stdin. Credits come from the `usage_summary` records Kiro
 | 10 | 11-07 10:30–10:41 | claude-haiku-4.5 | agent `nomographer` | Engine tasks T23–T26: `reader.js` (point on scale, value at point with clamping, line through two scales intersected with the third, any pair of scales, Z-chart diagonal) with unit tests and forward/backward reader properties on five charts | `src/core/reader.js`, `test/reader.test.js`, `test/reader.property.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 3.75 |
 | 11 | 11-07 10:44–10:48 | claude-haiku-4.5 | agent `nomographer` | Chart-studio tasks T3–T4: DOM-free studio state (`encodeStateToHash`, `decodeStateFromHash` with validation, `nextSolved` for the least-recently-moved handle, `fileName`) and its property tests | `src/ui/state.js`, `test/state.property.test.js`, `.kiro/specs/chart-studio/tasks.md` | 1.56 |
 | 12 | 11-09 10:29–10:41 | claude-haiku-4.5 | agent `nomographer` | Compiler gap: `BMI = weight / height^2` was rejected because `analyzePowerFactor` dropped nested powers `(height^2)^-1`; make it recursive, accept unary-minus exponents, add the BMI example and four regression tests | `src/core/compile.js`, `src/core/examples.js`, `test/compile.test.js` | 3.41 |
+| 13 | 11-11 10:13–10:18 | claude-sonnet-5.5 (1.3x) | agent `nomographer` | Engine tasks T38–T41: `make_nomogram` MCP server (stdio JSON-RPC, `initialize`, `tools/list`, `tools/call`, outFile jail, self-check line) and `test/mcp.test.js` (15 tests, one subprocess) | `mcp/server.mjs`, `test/mcp.test.js`, `.kiro/specs/nomogram-engine/tasks.md` | 5.85 (meter) |
+| 14 | 11-11 10:19–10:23 | claude-sonnet-5.5 | agent `nomographer` | Chart-studio T11, T12, T15 as automated checks: WCAG contrast from the CSS variables, labels, live regions, handle keyboard support, focus rings, responsive and print CSS, no inline styles, no CDN; mobile/tablet/desktop section for `scripts/shoot.py` | `test/studio-a11y.test.js`, `styles.css` (`--muted`, `--accent` darkened to pass 4.5:1 on the desk tone), `scripts/shoot.py`, `.kiro/specs/chart-studio/tasks.md` | 6.67 (meter) |
+| 15 | 11-11 10:25–10:27 | claude-sonnet-5.5 | agent `nomographer` | Two mobile defects my browser check found at 390 px (masthead wrapped to three lines; sheet only 226 px wide because it was sized by height): below 600 px hide the subtitle, no-wrap nav; below 1024 px size the sheet by width. Three tests and two `shoot.py` checks | `styles.css`, `src/ui/app.js` (`fitSheet`), `test/studio-a11y.test.js`, `scripts/shoot.py` | 2.62 (meter) |
+| 16 | 11-11 10:27–10:31 | claude-sonnet-5.5 | agent `nomographer` | Chart-studio T14 and T16 without a DOM library: studio chain (formula → chart → sheet → SVG/PDF) for all 7 examples, hash round trip, 25 seeded straightedge placements per example (collinearity determinant and reading vs formula), MCP certificate equals `formatCertificate`; timing budgets and source checks for the 250 ms debounce and for drags not rebuilding the sheet | `test/studio.integration.test.js`, `test/studio.perf.test.js`, `.kiro/specs/chart-studio/tasks.md` | 4.48 (meter) |
+| 17 | 11-11 10:32–10:39 | claude-sonnet-5.5 | agent `nomographer` | Chart-studio T13 and T17, engine T43 (MCP part): README (keyboard, browser support, URL hash, mobile, MCP server, performance, checks, layout tree, test count), JSDoc test, QA checklist with an evidence map that separates asserted from recorded checks | `README.md`, `mcp/server.mjs` (two JSDoc lines), `test/docs.test.js`, `test/QA-CHECKLIST.md`, both `tasks.md` | 13.03 (meter) |
 
 Other credit use: 0.09 before this project started; about 0.03 when a headless `/usage` command was sent to the model by mistake.
 
@@ -57,6 +62,14 @@ Counted from `ContextualHookInvoked` events in all session logs for this repo:
 - **12** – Kiro's shell crashed (PowerShell exit 3221225794) in the middle of the run, so it could not run the suite at the end and reported the fix unverified. Run afterwards by hand: all compiler tests green, but the BMI chart's output scale was laid out far off the sheet — a layout bug the compiler change exposed (see hand edits). It also chose its own BMI ranges (20–140 kg, 1.2–2.0 m) instead of the ones in the prompt.
 - **11** – The chart-studio task list had no checkboxes, so, as the prompt allowed, it added `**Status:** done` under T3 and T4. 181 tests green.
 
+**Meter on 11-11 (`kiro-cli chat --no-interactive "/usage"`):** free plan 47.71 of 50 used (unchanged by runs 13–17); Kiroween bonus 0.06 of 4,000 before run 13, 32.71 after run 17. Runs 13–17 used 32.65 (5.85 + 6.67 + 2.62 + 4.48 + 13.03). **Project total: 80.36 credits in 19 sessions** (47.71 free-plan credits through run 12, including 0.09 before the project and about 0.03 for the mistaken `/usage`, plus 32.65 bonus credits).
+
+- **13** – Kiro's write to `.kiro/settings/mcp.json` was denied by the agent's permission rules; it stopped and asked rather than going round them through the shell. I wrote the file by hand (below). Review by me: a fresh stdio session on a Z-chart (`sigma = F / A`) gave the certificate, 1,681 grid points, 6,694 placements and a self-check difference of 3.8e-13; a bad formula returned error -32602 with the character position.
+- **14** – Two colour variables failed WCAG AA on the desk tone (`--muted` 4.16, `--accent` 4.04); Kiro darkened both and warned that the UI vermilion (`#b73823`) now differs slightly from the printed one (`#c43c25` in `sheet.js`). I left it: the printed sheet is unchanged.
+- **15** – Looking at `mobile-390.png` from the new responsive check showed the masthead and the 226 px sheet problems; the check itself had passed. Fixed in this run and the screenshot re-read: masthead one row (52 px), sheet 366 px wide.
+- **16** – Kiro measured, not assumed: `app.js` has no `requestAnimationFrame`, so the T16 line about it is recorded as not true; drags only move existing overlay elements. Build times 14–28 ms per chart, sheet 2–28 ms, PDF 2–5 ms. My own check, separate from the tests: 2,000 random readings per example, |det| ≤ 9.1e-12 mm², reading vs formula ≤ 7.5e-11 relative.
+- **17** – Kiro's checklist marks each browser key as asserted or recorded and says "not automated - check by hand" where nothing covers an item (dialog, print dialog, Tab order, Shift+arrow press); I did not run those by hand.
+
 ## Hand edits (not Kiro)
 
 - `.gitignore` – rewritten by me (`.omx/`, `work/`, `node_modules/`; `.kiro/` is tracked). The tracker attributed it to run 03 because I edited it while that session ran.
@@ -81,3 +94,10 @@ Written by hand, not by Kiro, following the engine spec (T27–T37) and the char
 - `src/core/examples.js` – BMI ranges set to 30–150 kg and 1.4–2.1 m (adult range, as the prompt asked) and description rewritten.
 - `scripts/shoot.py` – BMI screenshot and reading check, scales-on-sheet checks for BMI and the typed formula, UTF-8 output on Windows, mouse moved off the example list before the typed-formula screenshot.
 - Result: 188/188 tests; browser check: BMI 70 kg, 1.75 m reads 22.86 kg/m² (straightedge vs formula Δ 6.4e-13), certificate ±0.63 %, no label overlaps on any of the seven examples, no console errors, SVG and one-page A4 PDF download.
+
+### 2026-11-11 (after runs 13–17)
+
+- `.kiro/settings/mcp.json` – written by me (registers server `isopleth-nomogram`, command `node`, args `mcp/server.mjs`) because Kiro's write there was denied; T40 ticked in `.kiro/specs/nomogram-engine/tasks.md` with that note.
+- `test/QA-CHECKLIST.md` – the "Last run" line, filled from my `shoot.py` run.
+- No other hand edits to source. The browser check ran from my shell, not Kiro's (Kiro's shell is limited to `node`, `npm`, `git status`, `git diff`).
+- Result: 261/261 tests; `scripts/shoot.py` exit 0, no console errors, no label overlaps on all seven examples, responsive checks true.

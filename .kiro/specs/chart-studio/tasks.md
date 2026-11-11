@@ -542,6 +542,7 @@ Verify accessibility:
 ---
 
 ## T13: Manual QA Checklist Task
+**Status:** done (checklist and its automated-evidence map written in test/QA-CHECKLIST.md; the by-hand browser run is still to be recorded on its "Last run" line)  
 **Requirements:** R15.2  
 **Effort:** 60 min
 
@@ -566,6 +567,7 @@ Document results in QA-CHECKLIST.md.
 ---
 
 ## T14: Integration Test (test/chart-studio.integration.test.js)
+**Status:** done (DOM-free: test/studio.integration.test.js covers the core chain the studio calls)  
 **Requirements:** All (end-to-end)  
 **Effort:** 45 min
 
@@ -607,6 +609,7 @@ Review completeness:
 ---
 
 ## T16: Performance Optimization
+**Status:** done (test/studio.perf.test.js; no requestAnimationFrame in app.js, drags move existing overlay elements)  
 **Requirements:** R13  
 **Effort:** 30 min
 
@@ -622,6 +625,7 @@ Optimize if needed:
 ---
 
 ## T17: Documentation
+**Status:** done (README.md; JSDoc on every export in src/ui/state.js and mcp/server.mjs, app.js has no exports; test/docs.test.js)  
 **Requirements:** Project completeness  
 **Effort:** 30 min
 

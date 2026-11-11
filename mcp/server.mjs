@@ -13,7 +13,9 @@ import { solveLine } from '../src/core/reader.js';
 import { formatCertificate, formatCertificateMethod } from '../src/core/certificate.js';
 import { formatNumber } from '../src/core/text.js';
 
+/** MCP protocol version this server answers `initialize` with. */
 export const PROTOCOL_VERSION = '2024-11-05';
+/** Server name and version reported in the `initialize` result (name matches .kiro/settings/mcp.json). */
 export const SERVER_INFO = { name: 'isopleth-nomogram', version: '1.0.0' };
 
 const WORKSPACE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');

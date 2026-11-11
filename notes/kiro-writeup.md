@@ -38,7 +38,11 @@ Kiro wrote the code; I reviewed every batch against the formulas, not just the g
 
 ## Result so far
 
-Engine (parser, compiler, scales, layout, reader, certificate, sheet, SVG/PDF) and browser studio: 188 tests green, including collinearity on 200 random readings per example chart. Independent check on 2,000 random readings per example: |det| ≤ 5e-11 mm². Headless Chrome check of the studio (`scripts/shoot.py`, 2026-11-09): seven examples with no label overlaps, straightedge vs formula Δ ≈ 1e-12 relative after dragging, SVG and one-page A4 PDF downloads, URL restores the chart, no console errors.
+Engine (parser, compiler, scales, layout, reader, certificate, sheet, SVG/PDF), browser studio and the `make_nomogram` MCP server: 261 tests green, including collinearity on 200 random readings per example chart. Independent check on 2,000 random readings per example (separate script, not part of the suite): |det| ≤ 9.1e-12 mm², reading vs formula ≤ 7.5e-11 relative. Headless Chrome check of the studio (`scripts/shoot.py`, 2026-11-11): seven examples with no label overlaps, straightedge vs formula Δ ≈ 1.7e-12 relative after dragging, SVG and one-page A4 PDF downloads, URL restores the chart, no console errors, and a responsive section (390 px phone with touch drag, 1023 px stacked, 1024 px side by side).
+
+The second Kiro wave on 11-11 (runs 13–17, claude-sonnet-5.5, 32.65 Kiroween bonus credits) built the MCP server that the `nomographer` agent can call (`.kiro/settings/mcp.json`), turned chart-studio tasks T11–T17 into automated checks (WCAG contrast computed from the CSS variables, labels, live regions, keyboard support, integration chain for all seven examples, timing budgets, JSDoc and README checks) and fixed what the checks and my browser look found: two colours below AA contrast, a masthead that wrapped on a phone and a sheet that rendered at 226 px on a 390 px screen.
+
+Kiro usage in total: 19 sessions, 80.36 credits (47.71 from the free plan, 32.65 from the Kiroween bonus), models Haiku 4.5, Sonnet 4.5, Sonnet 5.5, MiniMax M2.5 and Qwen3 Coder Next; every session is in `notes/kiro-usage-log.md`. Hand edits outside Kiro: the `.kiro/settings/mcp.json` file (Kiro's write was denied by its own permission rule), earlier fixes to the layout inverse and the negative-exponent scale extent, the hook scripts' report format, and the browser check scripts.
 
 ## Still to do before submission (remove this section from the final write-up)
 
@@ -48,10 +52,9 @@ Required by the rules (Submission Requirements):
 2. Working URL for judges: GitHub Pages from the repo root (static, no build step). Check the studio loads from the Pages URL (module paths are relative).
 3. Demo video under 3 minutes, public on YouTube, English, no third-party music or trademarks; draft in `notes/video-script.md`, screenshots in `work/shots-1109/`.
 4. Devpost form (draft https://devpost.com/software/1530210, currently "Untitled", created by the teammate's account): name *Isopleth*, tagline "Type a formula, print a paper calculator", category **Resurrection**, bonus **Best Student Project: Resurrection** (LinkedIn, student email, year and degree, school), Built with (Kiro, JavaScript, SVG, fast-check, Node test runner), GitHub URL, Pages URL, YouTube URL, description from README "Why this is a resurrection" and this write-up, testing instructions = README "Try it".
-5. This write-up: final pass with run 12 and the totals from `notes/kiro-usage-log.md`.
+5. This write-up: final pass; totals are in the Result section (runs 01–17).
 
 Optional, scored or bonus:
 
-- `make_nomogram` MCP server (engine spec T38–T41) is specified but not built. Kiro credits: about 2.3 left; the free plan resets to 50 on 12-01, four days before the deadline, enough for one Kiro run to build it.
-- Chart-studio spec T11–T17 (mobile, accessibility audit, integration test, performance, docs) are not ticked; the browser check covers part of them.
+- Done 11-11: `make_nomogram` MCP server (engine T38–T41) and chart-studio T11–T17 as automated checks. Not automated, still by hand: the how-it-works dialog, the print dialog and printed size, Tab order, a real Shift+arrow press (rows marked so in `test/QA-CHECKLIST.md`). The hook table above still shows counts from runs up to 09; recount from the session logs before the final write-up.
 - Blog post (2,000 Kiro credits, top 100) must say it is written for the Kiroween 2026 hackathon; Social Blitz post must start with `#KiroweenHackathon26`. Both need the entrant's own accounts and must be posted before the deadline.
