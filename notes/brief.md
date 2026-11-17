@@ -4,7 +4,7 @@ Source rules: `rules/overview-2026-10-31.txt`, `rules/rules-2026-10-31.txt` (rea
 
 ## Entry
 - **Category:** Resurrection — "Bring your favorite dead technology back to life. Reimagine obsolete tech with today's innovations or solving tomorrow's problems."
-- **Bonus:** Best Student Project: Resurrection ($1,500 + 1-year Kiro Pro Max). Needs LinkedIn, student email, year/degree, school (NCKU, Mechanical Engineering); proof of enrollment on request. Best Demo is automatic.
+- **Bonus:** Best Student Project: Resurrection ($1,500 + 1-year Kiro Pro Max). Needs LinkedIn, student email, year/degree, school; proof of enrollment on request. Best Demo is automatic.
 - **Dead technology:** the nomogram (alignment chart). Invented by Maurice d'Ocagne (1884); printed in engineering handbooks, aviation and navigation manuals, and clinical references (body-surface-area and dosing charts) until pocket calculators replaced them in the 1970s. A nomogram is a paper analog computer: lay a straightedge across two known values and read the answer where it crosses the third scale.
 
 ## Product

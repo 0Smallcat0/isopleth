@@ -4,6 +4,8 @@
 
 Nomograms were invented by Maurice d'Ocagne in 1884 and filled engineering handbooks, flight manuals and clinical references until pocket calculators replaced them. Isopleth brings them back with one thing the originals never had: every chart is checked against its formula by property-based tests, and carries a stated accuracy for a stated straightedge error.
 
+Live studio: <https://0smallcat0.github.io/isopleth/>
+
 Built with [Kiro](https://kiro.dev) for Kiroween 2026 (Resurrection category).
 
 ## Try it
