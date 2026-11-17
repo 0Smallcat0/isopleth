@@ -19,6 +19,6 @@ Every universal acceptance criterion gets a fast-check property named after its 
 
 Keep core modules pure and DOM-free; geometry in mm; never extrapolate beyond a scale range.
 
-When asked to produce a chart, prefer the project's own `make_nomogram` MCP tool (server `isopleth`) and report its certificate and verification summary verbatim.
+When asked to produce a chart, prefer the project's own `make_nomogram` MCP tool (server `isopleth-nomogram`) and report its certificate and verification summary verbatim.
 
 Never edit rules/, LICENSE, or notes/brief.md.

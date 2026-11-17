@@ -52,7 +52,7 @@ npm install
 npm test
 ```
 
-261 tests (Node's built-in runner plus [fast-check](https://fast-check.dev)), including:
+262 tests (Node's built-in runner plus [fast-check](https://fast-check.dev)), including:
 
 - **Collinearity.** For 200 random input pairs per example, the three points of the solution lie on one straight line: |det| ≤ 1e-9 of the sheet area. This is the property that makes a nomogram work.
 - **Round trip.** Reading a printed position back gives the value that was plotted.

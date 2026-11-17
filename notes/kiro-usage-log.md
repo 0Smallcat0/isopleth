@@ -101,3 +101,9 @@ Written by hand, not by Kiro, following the engine spec (T27–T37) and the char
 - `test/QA-CHECKLIST.md` – the "Last run" line, filled from my `shoot.py` run.
 - No other hand edits to source. The browser check ran from my shell, not Kiro's (Kiro's shell is limited to `node`, `npm`, `git status`, `git diff`).
 - Result: 261/261 tests; `scripts/shoot.py` exit 0, no console errors, no label overlaps on all seven examples, responsive checks true.
+
+### 2026-11-17 (hand edits while recording the demo video)
+
+- `src/ui/app.js` – the range fields in the scales table are now validated as a pair read from the row. Before, typing a min above the old max (for example height min 100 while max was 10) was dropped silently while the field kept showing 100, so the chart used the old range; found by driving the live page with Playwright. Regression test `test/studio.ranges.test.js` (a source check, like the drag-path test); the suite is now 262 tests.
+- `.kiro/agents/nomographer.md` – the prompt named the MCP server `isopleth`; `.kiro/settings/mcp.json` calls it `isopleth-nomogram`. Prompt text corrected to match.
+

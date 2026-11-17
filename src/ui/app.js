@@ -532,13 +532,20 @@ function setup() {
       rebuild({ keepStraightedge: true });
       return;
     }
-    const num = Number(t.value.trim());
-    const r = state.ranges[v] ?? [1, 10];
-    const next = [...r];
-    next[t.dataset.field === 'min' ? 0 : 1] = num;
-    if (t.value.trim() === '' || !Number.isFinite(num) || !(next[1] > next[0])) {
+    // Validate the pair as it stands in the row, not one field against the stored range:
+    // typing a min above the old max must not be dropped silently while the field shows it.
+    const row = t.closest('tr');
+    const read = (field) => {
+      const el = row.querySelector(`input[data-field="${field}"]`);
+      return el.value.trim() === '' ? NaN : Number(el.value.trim());
+    };
+    const next = [read('min'), read('max')];
+    if (!Number.isFinite(next[0]) || !Number.isFinite(next[1]) || !(next[1] > next[0])) {
       t.setAttribute('aria-invalid', 'true');
       return;
+    }
+    for (const el of row.querySelectorAll('input[data-field="min"], input[data-field="max"]')) {
+      el.removeAttribute('aria-invalid');
     }
     state.ranges[v] = next;
     rebuild();
