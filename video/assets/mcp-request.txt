@@ -1,0 +1,1 @@
+{"formula": "BSA = sqrt(height * weight / 3600)", "ranges": {"height": [100, 200], "weight": [20, 150]}}

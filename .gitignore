@@ -2,3 +2,9 @@
 work/
 node_modules/
 rules/
+video/frames/
+video/out/
+video/work/
+video/*.mp4
+notes/submit-checklist-*.md
+submission/

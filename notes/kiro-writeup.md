@@ -34,9 +34,9 @@ The hook scripts have their own tests (`test/hooks.test.js`), written by Kiro in
 
 ## What review caught
 
-Kiro wrote the code; I reviewed every batch against the formulas, not just the green test count. Three things the tests had missed came back to Kiro as regression tests: the outer square root not applied in the compiled evaluator, `sqrt(H·W/3600)` not normalised into a product of powers, and ratios never reaching the Z-chart branch. One batch ticked tasks whose files it never wrote; those were unticked. All of it is in `notes/kiro-usage-log.md`, with every session's model, time and credits and each hand edit.
+Kiro wrote the engine core (parser, compiler, scales, layout, reader), the MCP server and the studio's automated checks; I wrote the certificate, the sheet/SVG/PDF output and the browser studio against the chart-studio spec, and fixed the bugs listed in the usage log. I reviewed every batch against the formulas, not just the green test count. Three things the tests had missed came back to Kiro as regression tests: the outer square root not applied in the compiled evaluator, `sqrt(H·W/3600)` not normalised into a product of powers, and ratios never reaching the Z-chart branch. One batch ticked tasks whose files it never wrote; those were unticked. All of it is in `notes/kiro-usage-log.md`, with every session's model, time and credits and each hand edit.
 
-## Result so far
+## Result
 
 Engine (parser, compiler, scales, layout, reader, certificate, sheet, SVG/PDF), browser studio and the `make_nomogram` MCP server: 262 tests green, including collinearity on 200 random readings per example chart. Independent check on 2,000 random readings per example (separate script, not part of the suite): |det| ≤ 9.1e-12 mm², reading vs formula ≤ 7.5e-11 relative. Headless Chrome check of the studio (`scripts/shoot.py`, 2026-11-11): seven examples with no label overlaps, straightedge vs formula Δ ≈ 1.7e-12 relative after dragging, SVG and one-page A4 PDF downloads, URL restores the chart, no console errors, and a responsive section (390 px phone with touch drag, 1023 px stacked, 1024 px side by side).
 

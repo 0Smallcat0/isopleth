@@ -1,20 +1,20 @@
-# Demo video outline (target 2:45, hard limit 3:00)
+# Demo video: final storyboard and voice-over (2026-11-17)
 
-Audience: Kiroween judges scoring Potential Impact, Technological Implementation (how Kiro was used), Design, Innovation and Presentation, 20 % each, in the Resurrection category. One idea per shot; the sheet is always the hero.
+Final file: `video/isopleth-demo.mp4`, 150.5 s (limit: under 3 minutes), 1920x1080, 30 fps, English voice-over (edge-tts en-US-AndrewMultilingualNeural), no music, no third-party footage or trademarks. Made by `video/produce.py` (Playwright drives the real studio in Chrome, one screenshot per frame), `video/prep.py` (real PDF, MCP reply, test summary) and `video/assemble.py` (ffmpeg, loudnorm -14 LUFS).
 
-Shots 2–5 need the chart studio, which is specified but not built yet; the outline is the plan for when it is.
+| Start | On screen | Voice-over |
+| --- | --- | --- |
+|    0.0 s | Studio, panel hidden; straightedge dragged on Ohm's law; left text | Before pocket calculators, engineers solved formulas with a ruler. Lay it across two known values on a printed chart, and read the answer where it crosses the third scale. This is a nomogram. Maurice d'Ocagne systematised it in 1884, and it filled handbooks for a century. Then it died, because making one by hand took days, and nobody could prove it was accurate. |
+|   26.4 s | Type BSA formula and ranges in the live studio | Isopleth brings it back. Type a formula and the ranges. The compiler recognises its form, and lays out a three-scale chart in milliseconds. |
+|   38.1 s | Drag two handles, then the answer handle; readout strip boxed | Drag any two handles on the straightedge, and the third is solved. Move the answer, and it solves backwards. Under the sheet, the reading is compared with the formula on every move. |
+|   52.2 s | Accuracy block boxed; ruler error 0.5 -> 1 -> 2 mm re-measures | Every chart carries an accuracy certificate. If your ruler is off by half a millimetre, the answer is off by at most this much. Change the ruler error, and it is measured again, on the chart's own geometry. |
+|   67.7 s | Axial-stress Z-chart; real PDF download shown as a card with the 100 mm bar | Ratios get a Z-chart. Download the sheet as an SVG, or a one-page A4 PDF at true scale, with a hundred millimetre bar to check your printer. Once printed, it needs no power, no screen and no network. |
+|   84.5 s | .kiro tree and steering excerpt (real files) | Kiro built it, and the build is in the repo. Steering files keep the nomography maths in one place, and load only when Kiro touches the core, the tests or the MCP server. |
+|   98.5 s | EARS requirement and collinearity property (real text) | A spec, with requirements, design and tasks, turned every rule into a property. The most important one: for random inputs, the three points of every solution lie on one straight line. |
+|  113.4 s | Hooks with recounted fire counts; nomographer agent file | Hooks run the property suite on every save, and refuse to let a task finish while it is red. A custom agent, the nomographer, implemented the tasks one at a time. |
+|  126.3 s | make_nomogram request/reply (real server output) and npm test summary | An MCP server lets any Kiro session ask for a verified nomogram, and get back the certificate with the sheet. Every batch was reviewed against the formulas; three bugs the tests had missed became regression tests. |
+|  141.6 s | Wordmark, repo and Pages URLs | A dead tool, resurrected with proof. Isopleth. Open source on GitHub, and live on GitHub Pages. |
 
-| Time | Shot | Voice-over (draft) | On screen |
-|------|------|--------------------|-----------|
-| 0:00–0:15 | Close-up of a printed A4 nomogram on a desk; a steel ruler is laid across three scales | "Before calculators, engineers solved formulas with a ruler. Lay it across three scales, read the answer where it crosses the third. This is a nomogram, invented by Maurice d'Ocagne in 1884, and it is dead." | Paper, ruler, no UI |
-| 0:15–0:35 | Cut to the app: type `V = I * R` | "Isopleth brings it back. Type a formula, and it compiles a nomogram you can print at true scale." | Formula field, sheet redraws |
-| 0:35–1:05 | Drag the vermilion straightedge handles; then drag the result handle so the solved variable switches | "Drag any two handles; the third is solved. Move the answer and it solves backwards. Underneath, the app checks the geometric reading against the formula on every frame." | Readout strip with `Δ` line |
-| 1:05–1:25 | Point at the certificate sentence; switch tolerance 0.5 → 1.0 mm | "Every chart carries a certificate: if your ruler is off by half a millimetre, your answer is off by at most this much. It is computed, not promised." | Certificate sentence changes |
-| 1:25–1:45 | Load the Z-chart example `σ = F / A`, then Print → PDF preview at 100 % | "Ratios get a Z-chart. Print it at true scale; the 100 mm bar lets you check your printer. The printed chart needs no power." | Print preview, calibration bar |
-| 1:45–2:25 | Kiro IDE/CLI: steering files, spec (requirements → design → tasks), a hook firing on save, the nomographer agent, MCP `make_nomogram` call | "Kiro built it from a spec. Each EARS requirement became a fast-check property; hooks run the property suite on every save and refuse to finish a task while it is red. A custom agent and an MCP server let any Kiro session generate a verified nomogram." | `.kiro/` tree, test output, MCP call |
-| 2:25–2:45 | Back to paper; ruler crosses the scales | "A dead tool, resurrected with proof. Isopleth." | Wordmark, repo URL |
-
-Notes for production
-- Record the app at 1920×1080, browser zoom 100 %, system font; no cursor trails or zoom effects.
-- Voice: calm, unhurried; no "let's dive in". English.
-- Show real test output (counts of properties and runs), not a mock.
+Notes
+- The studio footage is the real app (not a mock); the Kiro cards quote real repo files and real server output. Kiro itself (CLI, headless) is not filmed; the cards show what it produced.
+- Re-render: serve the repo root (`python -m http.server 4719`), then `python -X utf8 video/produce.py` and `python -X utf8 video/assemble.py`.

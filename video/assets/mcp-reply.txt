@@ -1,0 +1,4 @@
+With the straightedge within ±0.5 mm of each mark, BSA reads within ±0.35 % of the formula.
+Measured on 1,681 grid points, 6,720 straightedge placements, ×1.1 margin.
+Maximum reading error found: 0.352 % (relative, including the ×1.1 margin).
+Self-check: formula vs chart reading at 5 of 5 evenly spaced input pairs, largest relative difference 1.8e-12.
