@@ -1,0 +1,1 @@
+Kiro wrote the engine core, the MCP server and the studio's checks; I hand-wrote the certificate, the sheet and the studio. The work is in the repo. Steering files keep the nomography maths in one place, and load only when Kiro touches the core, the tests or the MCP server.

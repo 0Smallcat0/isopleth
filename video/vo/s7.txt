@@ -1,0 +1,1 @@
+A spec, with requirements, design and tasks, turned every rule into a property. The most important one: for random inputs, the three points of every solution lie on one straight line.

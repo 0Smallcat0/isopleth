@@ -1,0 +1,1 @@
+Hooks run the property suite on every save, and refuse to let a task finish while it is red. A custom agent, the nomographer, implemented the engine batches, one task at a time.

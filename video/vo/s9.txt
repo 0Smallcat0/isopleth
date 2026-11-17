@@ -1,0 +1,1 @@
+An MCP server lets any Kiro session ask for a verified nomogram, and get back the certificate with the sheet. Every batch was reviewed against the formulas; three bugs the tests had missed became regression tests.

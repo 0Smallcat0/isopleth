@@ -7,7 +7,7 @@ inclusion: always
 ## Directory Layout
 
 ```
-d:\contests\kiroween/
+isopleth/
 ├── index.html              # Entry page (GitHub Pages root)
 ├── styles.css              # Global styles
 ├── README.md               # Project overview

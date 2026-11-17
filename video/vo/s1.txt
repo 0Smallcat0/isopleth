@@ -1,0 +1,1 @@
+Before pocket calculators, engineers solved formulas with a ruler. Lay it across two known values on a printed chart, and read the answer where it crosses the third scale. This is a nomogram. Maurice d'Ocagne systematised it in 1884, and it filled handbooks for a century. Then it died, because making one by hand took days, and nobody could prove it was accurate.

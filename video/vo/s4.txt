@@ -1,0 +1,1 @@
+Every chart carries an accuracy certificate. If your ruler is off by half a millimetre, the answer is off by at most this much. Change the ruler error, and it is measured again, on the chart's own geometry.

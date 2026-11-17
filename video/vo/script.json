@@ -4,9 +4,9 @@
  "s3": "Drag any two handles on the straightedge, and the third is solved. Move the answer, and it solves backwards. Under the sheet, the reading is compared with the formula on every move.",
  "s4": "Every chart carries an accuracy certificate. If your ruler is off by half a millimetre, the answer is off by at most this much. Change the ruler error, and it is measured again, on the chart's own geometry.",
  "s5": "Ratios get a Z-chart. Download the sheet as an SVG, or a one-page A4 PDF at true scale, with a hundred millimetre bar to check your printer. Once printed, it needs no power, no screen and no network.",
- "s6": "Kiro built it, and the build is in the repo. Steering files keep the nomography maths in one place, and load only when Kiro touches the core, the tests or the MCP server.",
+ "s6": "Kiro wrote the engine core, the MCP server and the studio's checks; I hand-wrote the certificate, the sheet and the studio. The work is in the repo. Steering files keep the nomography maths in one place, and load only when Kiro touches the core, the tests or the MCP server.",
  "s7": "A spec, with requirements, design and tasks, turned every rule into a property. The most important one: for random inputs, the three points of every solution lie on one straight line.",
- "s8": "Hooks run the property suite on every save, and refuse to let a task finish while it is red. A custom agent, the nomographer, implemented the tasks one at a time.",
+ "s8": "Hooks run the property suite on every save, and refuse to let a task finish while it is red. A custom agent, the nomographer, implemented the engine batches, one task at a time.",
  "s9": "An MCP server lets any Kiro session ask for a verified nomogram, and get back the certificate with the sheet. Every batch was reviewed against the formulas; three bugs the tests had missed became regression tests.",
  "s10": "A dead tool, resurrected with proof. Isopleth. Open source on GitHub, and live on GitHub Pages."
 }

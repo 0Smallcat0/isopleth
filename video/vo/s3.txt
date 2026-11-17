@@ -1,0 +1,1 @@
+Drag any two handles on the straightedge, and the third is solved. Move the answer, and it solves backwards. Under the sheet, the reading is compared with the formula on every move.

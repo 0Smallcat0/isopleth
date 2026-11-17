@@ -1,0 +1,1 @@
+Isopleth brings it back. Type a formula and the ranges. The compiler recognises its form, and lays out a three-scale chart in milliseconds.
